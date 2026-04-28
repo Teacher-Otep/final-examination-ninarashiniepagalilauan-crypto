@@ -1,63 +1,94 @@
+<?php require_once __DIR__ . '/../includes/get_students.php'; ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD Operations</title>
-    <link   rel="stylesheet" href="style.css">
+    <title>Student System</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="navbar">
-            <img src="../images/northhub.svg" id="logo"></img>
-            <button class="navbarbuttons" onclick="showSection('create')"> Create </button>
-            <button class="navbarbuttons" > Read </button>
-            <button class="navbarbuttons" > Update </button>
-            <button class="navbarbuttons" > Delete </button>
-    </nav>
-    <section id="home" class="homecontent"> 
-        <h1 class="splash">Welcome to Student Management System</h1>
-        <h2 class="splash">A Project in Integrative Programming Technologies</h2>
-    </section>
-    
-    <section id="create" class="content">
-        <h1 class="contenttitle"> Insert New Student </h1>
 
+<div class="navbar">
+    <img src="logo.png" id="logo" onclick="showSection('home')">
+
+    <div class="nav-buttons">
+        <button onclick="showSection('create')">Create</button>
+        <button onclick="showSection('read')">Read</button>
+        <button onclick="showSection('update')">Update</button>
+        <button onclick="showSection('delete')">Delete</button>
+    </div>
+</div>
+
+<section id="home" class="section">
+    <h1>Student Management System</h1>
+</section>
+
+<section id="create" class="section">
     <form action="../includes/insert.php" method="POST">
-        <label for="surname" class="label">Surname</label>
-        <input type="text" name="surname" id="surname" class="field" required><br/>
+        <input name="surname" placeholder="Surname">
+        <input name="name" placeholder="Name">
+        <input name="middlename" placeholder="Middle Name">
+        <input name="address" placeholder="Address">
+        <input name="contact" placeholder="Contact">
+        <button type="submit">Save</button>
+    </form>
+</section>
 
-        <label for="name" class="label">Name</label>
-        <input type="text" name="name" id="name" class="field" required><br/>
+<section id="read" class="section">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
 
-        <label for="middlename" class="label">Middle name</label>
-        <input type="text" name="middlename" id="middlename" class="field"><br/>
+        <?php foreach($students as $s): ?>
+        <tr>
+            <td><?= $s['id'] ?></td>
+            <td><?= $s['surname']." ".$s['name'] ?></td>
+            <td>
+                <button onclick="editStudent('<?= $s['id'] ?>','<?= $s['name'] ?>','<?= $s['surname'] ?>','<?= $s['middlename'] ?>','<?= $s['address'] ?>','<?= $s['contact_number'] ?>')">Edit</button>
+                <a href="../includes/delete.php?id=<?= $s['id'] ?>">Delete</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+</section>
 
-        <label for="address" class="label">Address</label>
-        <input type="text" name="address" id="address" class="field"><br/>
+<section id="update" class="section">
+    <form action="../includes/update.php" method="POST">
+        <input type="hidden" id="edit_id" name="id">
+        <input id="edit_surname" name="surname" placeholder="Surname">
+        <input id="edit_name" name="name" placeholder="Name">
+        <input id="edit_middlename" name="middlename" placeholder="Middle Name">
+        <input id="edit_address" name="address" placeholder="Address">
+        <input id="edit_contact" name="contact" placeholder="Contact">
+        <button type="submit">Update</button>
+    </form>
+</section>
 
-        <label for="contact" class="label">Mobile Number</label>
-        <input type="text" name="contact" id="contact" class="field"><br/>
+<section id="delete" class="section">
+    <h2>Delete Students</h2>
 
-        <div id="btncontainer">
-            <button type="button" id="clrbtn" class="btns">Clear Fields</button><br/>
-            <button type="submit" id="savebtn" class="btns">Save</button>
-        </div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
 
-        <div id="success-toast" class="toast-hidden">
-            Registration Successful!
-        </div>
-    </form>   
+        <?php foreach($students as $s): ?>
+        <tr>
+            <td><?= $s['id'] ?></td>
+            <td><?= $s['surname']." ".$s['name'] ?></td>
+            <td>
+                <a href="../includes/delete.php?id=<?= $s['id'] ?>" onclick="return confirm('Delete?')">Delete</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+</section>
 
-    </section>
-
-<br/><br/><br/><br/>
-
-    <section id="read" class="content"> View Students </section>
-    <section id="update" class="content"> Update Student Records </section>
-    <section id="delete" class="content"> Remove Student Records </section>
-
-
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

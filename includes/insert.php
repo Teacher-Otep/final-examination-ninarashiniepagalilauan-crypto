@@ -1,32 +1,8 @@
 <?php
+require_once 'db.php';
 
-require_once __DIR__ . '/db.php';
+$stmt = $pdo->prepare("INSERT INTO students (name, surname, middlename, address, contact_number) VALUES (?, ?, ?, ?, ?)");
+$stmt->execute([$_POST['name'], $_POST['surname'], $_POST['middlename'], $_POST['address'], $_POST['contact']]);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['name'] ?? '';
-    $surname = $_POST['surname'] ?? '';
-    $middlename = $_POST['middlename'] ?? '';
-    $address = $_POST['address'] ?? '';
-    $contact = $_POST['contact'] ?? '';
-
-    try {
-        $sql = "INSERT INTO students (name, surname, middlename, address, contact_number) 
-                VALUES (:name, :surname, :middlename, :address, :contact)";
-        
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':name'       => $name,
-            ':surname'    => $surname,
-            ':middlename' => $middlename,
-            ':address'    => $address,
-            ':contact'    => $contact
-        ]);
-
-        header("Location: ../public/index.php?status=success");
-        exit();
-        
-    } catch (PDOException $e) {
-        echo "Database Error: " . $e->getMessage();
-    }
-}
+header("Location: ../public/index.php?status=success");
 ?>
